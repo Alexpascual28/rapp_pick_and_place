@@ -198,9 +198,11 @@ class ArmBot:
     def get_current_image(self):
         return self.current_image
     
+    # Displays image
     def show_image(self, frame_name, image):
         cv2.imshow(frame_name, image)
 
+    # Stops image acquisition thread
     def stop_image_acquisition(self):
         self.camera_thread.join()
 
@@ -242,6 +244,7 @@ class ArmBot:
             self.cam.shutdown()
             print("Camera Off")
 
+    # Takes one picture
     def take_picture(self):
         try:
             # Start the camera
