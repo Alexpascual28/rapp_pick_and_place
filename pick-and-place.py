@@ -40,7 +40,7 @@ def main():
     image = arm.get_current_image()
     print("[", time.time(), "] initial frame. ""Shape: ", image.shape)
         
-    if not None in image:
+    if image is not None:
         # Show the image and wait a short time with:
         cv2.imshow("Capture", image)
         cv2.waitKey(1)
@@ -80,7 +80,7 @@ def main():
                 image = arm.get_current_image()
                 
                 # If a frame is taken (frame.shape is not empty)
-                if not None in image:
+                if image is not None:
                     
                     # b. Perform shape detection or blob detection using OpenCV to identify the target object to pick up.
                     
