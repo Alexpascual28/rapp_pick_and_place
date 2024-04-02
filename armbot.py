@@ -13,6 +13,7 @@ from evasdk import Eva
 import time
 import cv2
 from aravis import Camera
+import threading
 
 # 2. Initialize your kinematics functions and variables including the constants (dimensions, etc.) for the EVA robot arm.
 class ArmBot:
@@ -23,6 +24,7 @@ class ArmBot:
         self.cam = self.initialize_camera(arm_hostname);
         
         self.home_pose = None; # Initializes home_pose as None as the pose is updated the first time the robot is homed.
+        self.current_image = None # Instantiates variable to store current current image
         
         # 4. Move the arm to a starting position, ideally near where your target is located so that your camera can see it, 
         #    and initialize the state of the robot arm to have no object in its gripper and to move to pick up.
@@ -187,8 +189,23 @@ class ArmBot:
             self.eva.gpio_set('ee_d1', True)
             self.eva.gpio_set('ee_d0', False)
 
+    # Start continuous image acquisition
+    def start_image_acquisition(self, time_period = 86400, show_feed = True):
+        self.camera_thread = threading.Thread(target=self.show_camera_view, args=(time_period, show_feed))
+        self.camera_thread.start()
+
+    # Returns current image
+    def get_current_image(self):
+        return self.current_image
+    
+    def show_image(self, frame_name, image):
+        cv2.imshow(frame_name, image)
+
+    def stop_image_acquisition(self):
+        self.camera_thread.join()
+
     # Shows continuous camera view
-    def show_camera_view(self, time_period):
+    def show_camera_view(self, time_period = 60, show_feed = True):
         try:
             # Start the camera
             self.cam.start_acquisition_continuous()
@@ -210,10 +227,10 @@ class ArmBot:
                 
                 if not 0 in frame.shape:
                     # Convert to standard RGB format
-                    image = cv2.cvtColor(frame, cv2.COLOR_BayerRG2RGB)
+                    self.current_image = cv2.cvtColor(frame, cv2.COLOR_BayerRG2RGB)
             
                     # Show the image and wait a short time with:
-                    cv2.imshow("capture", image)
+                    if show_feed == True: cv2.imshow("capture", self.current_image)
                     cv2.waitKey(delay)
                     
         except KeyboardInterrupt:
