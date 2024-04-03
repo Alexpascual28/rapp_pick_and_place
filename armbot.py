@@ -312,7 +312,7 @@ class ArmBot:
             # blueMax= (155,255,230)
 
     # Detect shapes from given image 
-    def detect_shapes(self, mask, shape_name, frame_name="Shape Frame", show_frame = False):
+    def detect_shapes(self, mask, shape_name, frame_name="Shape Frame", show_frame = False, return_largest = False):
         possible_shapes = {'triangle': 3, 'rectangle': 4, 'star': 10, 'circle': 11}
 
         if shape_name in possible_shapes:
@@ -332,24 +332,50 @@ class ArmBot:
 
             shape_counter = 0
 
-            for contour in contours[-3:]:
+            if return_largest == False:
+                for contour in contours[-3:]:
+                    #Amount of edges
+                    approx = cv2.approxPolyDP(contour, 0.02*cv2.arcLength(contour, True), True)
+
+                    #Center locations
+                    M = cv2.moments(contour)
+                    if M['m00'] == 0.0:
+                        continue
+                    centroid_x = int(M['m10']/M['m00'])
+                    centroid_y = int(M['m01']/M['m00'])
+
+                    if (len(approx) == possible_shapes.get(shape_name)) or (len(approx) >= 11 and shape_name == 'circle'):
+                        shape = [f"{shape_name} {shape_counter}", contour, centroid_x, centroid_y, len(approx)]
+                        shapes.append(shape)
+                        shape_counter += 1
+
+                return shapes
+            
+            else:
+                # Select the largest one
+                max_contour = max(contours, key = cv2.contourArea)
+
                 #Amount of edges
-                approx = cv2.approxPolyDP(contour, 0.02*cv2.arcLength(contour, True), True)
+                approx = cv2.approxPolyDP(max_contour, 0.02*cv2.arcLength(max_contour, True), True)
 
                 #Center locations
-                M = cv2.moments(contour)
-                if M['m00'] == 0.0:
-                    continue
-                centroid_x = int(M['m10']/M['m00'])
-                centroid_y = int(M['m01']/M['m00'])
+                M = cv2.moments(max_contour)
+                if M['m00'] != 0.0:
+                    centroid_x = int(M['m10']/M['m00'])
+                    centroid_y = int(M['m01']/M['m00'])
 
-                if (len(approx) == possible_shapes.get(shape_name)) or (len(approx) >= 11 and shape_name == 'circle'):
-                    shape = [f"{shape_name} {shape_counter}", contour, centroid_x, centroid_y, len(approx)]
-                    shapes.append(shape)
-                    shape_counter += 1
+                    if (len(approx) == possible_shapes.get(shape_name)) or (len(approx) >= 11 and shape_name == 'circle'):
+                        shape = [shape_name, max_contour, centroid_x, centroid_y, len(approx)]
 
-            return shapes
-        
+                        return shape
+                    
+                    else:
+                        print("No target shapes detected.")
+                        return None
+                else:
+                    print("No contours detected.")
+                    return None
+                
         else:
             print("Incorrect shape value.")
             return None

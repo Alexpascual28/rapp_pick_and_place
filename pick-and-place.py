@@ -83,67 +83,27 @@ def main():
                 if image is not None:
                     
                     # b. Perform shape detection or blob detection using OpenCV to identify the target object to pick up.
+                    # Detect red colour
+                    red_mask = arm.detect_colour(image, "red", show_frame=False)
                     
-                    # Convert rgb image into hsv image
-                    # hsv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2HSV) # BGR to HSV
-                    hsv_image = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
-                    
-                    # Initialise sensitivity colour detection value (10 should be enough)
-                    red_sensitivity = 10
-                    yellow_sensitivity = 12
-                    cyan_sensitivity = 16
-                    magenta_sensitivity = 16
-                    
-                    # Identify hue for different colours
-                    red_hue = 0
-                    yellow_hue = 30
-                    cyan_hue = 90
-                    magenta_hue = 150
-                    
-                    # Set upper and lower bounds for HSV colours
-                    # Red = 0
-                    hsv_red_lower = np.array([red_hue - red_sensitivity, 100, 100])
-                    hsv_red_upper = np.array([red_hue + red_sensitivity, 255, 255])
-                    
-                    # Filter out colours separately using cv2.inRange() method
-                    red_mask = cv2.inRange(hsv_image, hsv_red_lower, hsv_red_upper)
-                    
-                    # Generalize mask by using morphology
-                    kernel_open = np.ones((15,15), np.uint8)
-                    kernel_close = np.ones((30,30), np.uint8)
-                    red_mask = cv2.morphologyEx(red_mask, cv2.MORPH_CLOSE, kernel_close)
-                    red_mask = cv2.morphologyEx(red_mask, cv2.MORPH_OPEN, kernel_open)
-                    
-                    # Apply mask to original image using cv2.bitwise_and() method
-                    mask_image = cv2.bitwise_and(image, image, mask=red_mask)
-                    
-                    # Detect contours within image
-                    contours = cv2.findContours(red_mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-                    
-                    # If there is any:
-                    if len(contours[0]) > 0:
-                        # Select the largest one
-                        max_contour = max(contours[0], key = cv2.contourArea)
-                        
-                        # Calculate minimum rectangle parameters
-                        rectangle = cv2.minAreaRect(max_contour)
+                    # Detect largest rectangle within image
+                    shape = arm.detect_shapes(red_mask, "rectangle", show_frame=False, return_largest = True)
+
+                    if shape is not None:
+                        # Calculate minimum rectangle area parameters
+                        rectangle = cv2.minAreaRect(shape[1])
                         [[center_x, center_y], [contour_width, contour_height], angle_of_rotation] = rectangle
-                        
+
                         # Get corner points of the rectangle
                         box = cv2.boxPoints(rectangle)
                         box = np.int0(box)
-                        
+
                         # c. Show the frame in the OpenCV window with detection annotations.
-                        
-                        # Draw and label the contours
-                        cv2.putText(mask_image, "target", (center_x, center_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
-                        cv2.drawContours(mask_image, [box], -1, (0, 255, 0), 2)
-                        
-                        cv2.putText(image, "target", (center_x, center_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
+                        cv2.putText(image, f"Rectangle {shape[0]}", (center_x, center_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
                         cv2.drawContours(image, [box], -1, (0, 255, 0), 2)
             
                         # Show the image and wait a short time with:
-                        cv2.imshow("capture", image)
+                        cv2.imshow("Capture 2", image)
                         cv2.waitKey(1)
                         
                         # d. Identify the location of the target object or the target drop location and convert this target location
@@ -196,7 +156,7 @@ def main():
                         else: # If the object is in the centre (within the margin)
                             is_aligned_y = True;
                             target_position_y = 0; # Stop
-                              
+                            
                         # Adjust z axis
                         if (center_z > target_distance_to_object + margin): # If the object is too far away
                             target_position_z = -robot_step_size; # Move forward
@@ -215,7 +175,7 @@ def main():
         
                         # Move the robot
                         arm.shift_end_efector(target_position);
-                          
+                        
                         # If the gripper is aligned right on top of the object (on the three axis), break the loop (see beginning of while statement)
                         is_gripper_over_object = is_aligned_x and is_aligned_y and is_aligned_z;
                         
