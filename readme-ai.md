@@ -31,7 +31,7 @@
 
 ##  Overview
 
-<code>This project provides a comprehensive framework for controlling a robotic arm to perform a pick-and-place operation. It leverages computer vision to identify objects, calculate their positions, and manipulate them accurately. The project is structured into three main components: kinematics calculations (kinematics.py), the robotic arm control (armbot.py), and the pick-and-place algorithm implementation (pick-and-place.py). This guide details the setup process, key functionalities, and the mathematical foundations behind the robotic operations.</code>
+<code>This project provides a comprehensive framework for controlling a robotic arm to perform a pick-and-place operation. It leverages computer vision to identify objects, calculate their positions, and manipulate them accurately. The project is structured into three main components: kinematics calculations (**kinematics.py**), the robotic arm control (**armbot.py**), and the pick-and-place algorithm implementation (**pick-and-place.py**). This guide details the setup process, key functionalities, and the mathematical foundations behind the robotic operations.</code>
 
 ---
 
@@ -66,10 +66,10 @@
 
 | File                                                                                                        | Summary                         |
 | ---                                                                                                         | ---                             |
-| [pick-and-place.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/pick-and-place.py) | <code>► INSERT-TEXT-HERE</code> |
-| [armbot.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/armbot.py)                 | <code>► INSERT-TEXT-HERE</code> |
-| [kinematics.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/kinematics.py)         | <code>► INSERT-TEXT-HERE</code> |
-| [aravis.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/aravis.py)                 | <code>► INSERT-TEXT-HERE</code> |
+| [pick-and-place.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/pick-and-place.py) | <code>► Main pick and place algorithm </code> |
+| [armbot.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/armbot.py)                 | <code>► Armbot class </code> |
+| [kinematics.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/kinematics.py)         | <code>► Kinematics class </code> |
+| [aravis.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/aravis.py)                 | <code>► Aravis class for camera control </code> |
 
 </details>
 
@@ -93,9 +93,24 @@
 
 ##  Getting Started
 
-**System Requirements:**
+**Prerequisites:**
 
-* **Python**: `version x.y.z`
+To run this project, you need Python installed on your system (Python 3.6 or newer is recommended). Additionally, you must install the following libraries:
+
+* **Python**: `version 3.6.0++`
+* **NumPy**: `For numerical calculations`
+* **Matplotlib**: `For plotting and visualization of the robot's movements`
+* **SymPy**: `For symbolic mathematics and kinematics calculations`
+* **OpenCV (cv2)**: `For image processing and computer vision tasks`
+* **Threading**: `For parallel execution of image acquisition and processing`
+* **evasdk (specific to the EVA robotic arm, included in evasdk folder)**: `For eva robot arm control`
+* **aravis**: `For camera control`
+
+You can install these packages using pip:
+
+> ```console
+> $ pip install numpy matplotlib sympy opencv-python aravis
+> ```
 
 ###  Installation
 
@@ -112,34 +127,92 @@
 > $ cd rapp_pick_and_place
 > ```
 >
-> 3. Install the dependencies:
-> ```console
-> $ pip install -r requirements.txt
-> ```
+> 3. Install the dependencies.
+> 
 
-###  Usage
+###  Running the Code
+
+To start the pick-and-place operation, run the pick-and-place.py script in your terminal:
 
 <h4>From <code>source</code></h4>
 
 > Run rapp_pick_and_place using the command below:
 > ```console
-> $ python main.py
+> $ python pick-and-place.py
 > ```
 
-###  Tests
-
-> Run the test suite using the command below:
-> ```console
-> $ pytest
-> ```
+Ensure that kinematics.py and armbot.py are in the same directory as pick-and-place.py, as they are imported by the main script.
 
 ---
 
-##  Project Roadmap
+## Key Components
 
-- [X] `► INSERT-TASK-1`
-- [ ] `► INSERT-TASK-2`
-- [ ] `► ...`
+### Kinematics: Mathematical Foundations
+
+`kinematics.py` defines the **Kinematics** class responsible for calculating the robot arm's movements. It uses mathematical models to determine how the arm should move its joints to reach a specific position.
+
+**Inverse Kinematics and the Jacobian Matrix**
+
+Inverse kinematics is the process of determining the joint parameters that provide a desired position of the robot's end effector. The Jacobian matrix is a critical tool in solving inverse kinematics problems because it relates the change in joint angles to the resulting movement of the end effector in space.
+
+In the Kinematics class, we calculate the Jacobian matrix as follows:
+
+> ```console
+> # Calculate the numerical value of J (jacobian) at each point,
+> # you can produce the Jacobian as follows
+> J = p.jacobian(theta)
+> J_i = J.subs({theta1:theta_i[0], theta2:theta_i[1], theta3:theta_i[2],
+>             theta4:theta_i[3], theta5:theta_i[4], theta6:theta_i[5]}).evalf()
+> ```
+
+Where `p` is the position vector of the end effector, and `theta` represents the joint angles.
+
+To move the end effector towards a target, we adjust the joint angles based on the calculated differential movement `dp`. The Jacobian inverse is used to find the necessary change in joint angles `dtheta` to achieve `dp`:
+
+> ```console
+> J_inv = J_i.pinv()
+> dtheta = J_inv * dp_step
+> ```
+
+`dp_step` is the desired small step towards the target position. The pseudoinverse (`pinv()`) of the Jacobian is used when the matrix is not square, ensuring a solution exists.
+
+### ArmBot
+
+The **ArmBot** class, defined in `armbot.py`, using the kinematics class to control the robotic arm and integrates computer vision for object detection. Key functions include:
+
+**Main Functions of ArmBot Class**
+
+* **initialize_kinematics()**: Sets up the kinematics for the robotic arm.
+* **move_end_efector(absolute_position)**: Moves the end effector to an absolute position.
+* **shift_end_efector(relative_position)**: Adjusts the end effector's position relative to its current location.
+* **open_gripper()** and **close_gripper()**: Controls the gripper to pick up or release objects.
+* **start_image_acquisition()**: Starts continuous image acquisition and processing.
+* **detect_colour(image, colour_name)**: Identifies objects in the image based on their color.
+* **detect_shapes(mask, shape_name)**: Detects geometric shapes within a masked image.
+
+### Pick-and-Place Algorithm
+
+The pick-and-place algorithm integrates kinematics, robotic arm control, and computer vision to identify objects, calculate their positions, and manipulate them. The process involves:
+
+* Moving the arm to a starting position and opening the gripper.
+* Continuously capturing images to detect a target object based on color and shape.
+* Calculating the object's position in the camera frame and adjusting the arm's position to align the gripper above the object.
+* Lowering the gripper, closing it to grasp the object, lifting, and moving the object to a new location for release.
+
+> ```console
+> # From pick-and-place.py, aligning and picking up an object
+> if is_gripper_over_object:
+>    arm.open_gripper()
+>    pick_up_position = [0, 0, -0.05] 
+>    arm.shift_end_efector(pick_up_position)
+>    arm.close_gripper()
+>    pick_up_position = [0, 0, 0.3] 
+>    arm.shift_end_efector(pick_up_position)
+>    ...
+>
+> ```
+
+This snippet shows how the script aligns the gripper above the object, adjusts the gripper's height to pick up the object, and then moves the object to a predefined location.
 
 ---
 
@@ -185,19 +258,5 @@ Contributions are welcome! Here are several ways you can contribute:
    </a>
 </p>
 </details>
-
----
-
-##  License
-
-This project is protected under the [SELECT-A-LICENSE](https://choosealicense.com/licenses) License. For more details, refer to the [LICENSE](https://choosealicense.com/licenses/) file.
-
----
-
-##  Acknowledgments
-
-- List any resources, contributors, inspiration, etc. here.
-
-[**Return**](#-overview)
 
 ---
