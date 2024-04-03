@@ -2,7 +2,7 @@
 """
 Created on Mon May  1 17:23:18 2023
 
-@title: Lab Session 7 Task 3: Implement Picking-Up Motion
+@title: Implement Picking-Up Motion
 @author: Alejandro Pascual San Roman (bdh532)
 @organisation: School of Physics, Engineering and Technology. University of York
 
