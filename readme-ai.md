@@ -2,17 +2,11 @@
   <img src="https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/ec559a9f6bfd399b82bb44393651661b08aaf7ba/icons/folder-markdown-open.svg" width="100" alt="project-logo">
 </p>
 <p align="center">
-    <h1 align="center">RAPP_PICK_AND_PLACE</h1>
+    <h1 align="center">Robotic Arm Pick and Place</h1>
 </p>
 <p align="center">
-    <em><code>► INSERT-TEXT-HERE</code></em>
+    <em><code>RAPP (Robot Arm Pick & Place) - Pick and place algorithm using OpenCV and the Armbot kinematics class, as a demo project. Using the algorithm, the EVA arm can detect an object, pick it up with an implemented custom gripper, and place it elsewhere. Using Python.</code></em>
 </p>
-<p align="center">
-	<img src="https://img.shields.io/github/license/Alexpascual28/rapp_pick_and_place.git?style=default&logo=opensourceinitiative&logoColor=white&color=0080ff" alt="license">
-	<img src="https://img.shields.io/github/last-commit/Alexpascual28/rapp_pick_and_place.git?style=default&logo=git&logoColor=white&color=0080ff" alt="last-commit">
-	<img src="https://img.shields.io/github/languages/top/Alexpascual28/rapp_pick_and_place.git?style=default&color=0080ff" alt="repo-top-language">
-	<img src="https://img.shields.io/github/languages/count/Alexpascual28/rapp_pick_and_place.git?style=default&color=0080ff" alt="repo-language-count">
-<p>
 <p align="center">
 	<!-- default option, no dependency badges. -->
 </p>
@@ -22,7 +16,6 @@
   <summary>Table of Contents</summary><br>
 
 - [ Overview](#-overview)
-- [ Features](#-features)
 - [ Repository Structure](#-repository-structure)
 - [ Modules](#-modules)
 - [ Getting Started](#-getting-started)
@@ -38,13 +31,7 @@
 
 ##  Overview
 
-<code>► INSERT-TEXT-HERE</code>
-
----
-
-##  Features
-
-<code>► INSERT-TEXT-HERE</code>
+<code>This project provides a comprehensive framework for controlling a robotic arm to perform a pick-and-place operation. It leverages computer vision to identify objects, calculate their positions, and manipulate them accurately. The project is structured into three main components: kinematics calculations (kinematics.py), the robotic arm control (armbot.py), and the pick-and-place algorithm implementation (pick-and-place.py). This guide details the setup process, key functionalities, and the mathematical foundations behind the robotic operations.</code>
 
 ---
 
@@ -75,7 +62,7 @@
 
 ##  Modules
 
-<details closed><summary>.</summary>
+<details open><summary>.</summary>
 
 | File                                                                                                        | Summary                         |
 | ---                                                                                                         | ---                             |
