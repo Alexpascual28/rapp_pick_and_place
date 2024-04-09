@@ -157,7 +157,7 @@ Inverse kinematics is the process of determining the joint parameters that provi
 
 In the Kinematics class, we calculate the Jacobian matrix as follows:
 
-> ```console
+> ```python
 > # Calculate the numerical value of J (jacobian) at each point,
 > # you can produce the Jacobian as follows
 > J = p.jacobian(theta)
@@ -169,7 +169,7 @@ Where `p` is the position vector of the end effector, and `theta` represents the
 
 To move the end effector towards a target, we adjust the joint angles based on the calculated differential movement `dp`. The Jacobian inverse is used to find the necessary change in joint angles `dtheta` to achieve `dp`:
 
-> ```console
+> ```python
 > J_inv = J_i.pinv()
 > dtheta = J_inv * dp_step
 > ```
@@ -180,7 +180,7 @@ To move the end effector towards a target, we adjust the joint angles based on t
 
 The **ArmBot** class, defined in `armbot.py`, using the kinematics class to control the robotic arm and integrates computer vision for object detection. To start the class you must first create an instance of it by providing the arm name as follows:
 
-> ```console
+> ```python
 > arm = Arm("evatrendylimashifterpt410")
 > ```
 
@@ -209,8 +209,9 @@ The pick-and-place algorithm integrates kinematics, robotic arm control, and com
 * Calculating the object's position in the camera frame and adjusting the arm's position to align the gripper above the object.
 * Lowering the gripper, closing it to grasp the object, lifting, and moving the object to a new location for release.
 
-> ```console
+> ```python
 > # From pick-and-place.py, aligning and picking up an object
+> 
 > if is_gripper_over_object:
 >    arm.open_gripper()
 >    pick_up_position = [0, 0, -0.05] 
