@@ -178,15 +178,25 @@ To move the end effector towards a target, we adjust the joint angles based on t
 
 ### ArmBot
 
-The **ArmBot** class, defined in `armbot.py`, using the kinematics class to control the robotic arm and integrates computer vision for object detection. Key functions include:
+The **ArmBot** class, defined in `armbot.py`, using the kinematics class to control the robotic arm and integrates computer vision for object detection. To start the class you must first create an instance of it by providing the arm name as follows:
+
+> ```console
+> arm = Arm("evatrendylimashifterpt410")
+> ```
+
+The arm and camera names and ips can be changed in the "initialize_arm()" and the "initialize_camera()" functions within the armbot class.
+
+After an arm object has been instatiated, functions can be run using dot notation as usual. Key functions include:
 
 **Main Functions of ArmBot Class**
 
-* **initialize_kinematics()**: Sets up the kinematics for the robotic arm.
 * **move_end_efector(absolute_position)**: Moves the end effector to an absolute position.
 * **shift_end_efector(relative_position)**: Adjusts the end effector's position relative to its current location.
+* **set_joint_angles(joint_angles)**: Moves arm by directly commanding each joint to move to the specified angle (6DOF).
 * **open_gripper()** and **close_gripper()**: Controls the gripper to pick up or release objects.
-* **start_image_acquisition()**: Starts continuous image acquisition and processing.
+* **start_image_acquisition()**: Starts continuous image acquisition and processing, in parallel thread.
+* **get_current_image()**: Returns current image in continuous feed thread.
+* **take_picture()**: Takes and returns single picture without having to start a parallel continuous feed.
 * **detect_colour(image, colour_name)**: Identifies objects in the image based on their color.
 * **detect_shapes(mask, shape_name)**: Detects geometric shapes within a masked image.
 
