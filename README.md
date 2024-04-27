@@ -77,15 +77,15 @@
 
 | File                                                                                                                 | Summary                         |
 | ---                                                                                                                  | ---                             |
-| [eva_http_client.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/evasdk/eva_http_client.py) | <code>► INSERT-TEXT-HERE</code> |
-| [eva_ws.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/evasdk/eva_ws.py)                   | <code>► INSERT-TEXT-HERE</code> |
-| [EvaDiscoverer.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/evasdk/EvaDiscoverer.py)     | <code>► INSERT-TEXT-HERE</code> |
-| [eva_locker.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/evasdk/eva_locker.py)           | <code>► INSERT-TEXT-HERE</code> |
-| [eva_errors.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/evasdk/eva_errors.py)           | <code>► INSERT-TEXT-HERE</code> |
-| [version.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/evasdk/version.py)                 | <code>► INSERT-TEXT-HERE</code> |
-| [Eva.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/evasdk/Eva.py)                         | <code>► INSERT-TEXT-HERE</code> |
-| [helpers.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/evasdk/helpers.py)                 | <code>► INSERT-TEXT-HERE</code> |
-| [robot_state.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/evasdk/robot_state.py)         | <code>► INSERT-TEXT-HERE</code> |
+| [eva_http_client.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/evasdk/eva_http_client.py) | <code> </code> |
+| [eva_ws.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/evasdk/eva_ws.py)                   | <code> </code> |
+| [EvaDiscoverer.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/evasdk/EvaDiscoverer.py)     | <code> </code> |
+| [eva_locker.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/evasdk/eva_locker.py)           | <code> </code> |
+| [eva_errors.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/evasdk/eva_errors.py)           | <code> </code> |
+| [version.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/evasdk/version.py)                 | <code> </code> |
+| [Eva.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/evasdk/Eva.py)                         | <code> </code> |
+| [helpers.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/evasdk/helpers.py)                 | <code> </code> |
+| [robot_state.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/evasdk/robot_state.py)         | <code> </code> |
 
 </details>
 
