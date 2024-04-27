@@ -20,12 +20,12 @@
 - [ Modules](#-modules)
 - [ Getting Started](#-getting-started)
   - [ Installation](#-installation)
-  - [ Usage](#-usage)
-  - [ Tests](#-tests)
-- [ Project Roadmap](#-project-roadmap)
+  - [ Running the Code](#-running-the-code)
+- [ Key Components](#key-components)
+  - [ Kinematics: Mathematical Foundations](#kinematics-mathematical-foundations)
+  - [ ArmBot](#armbot)
+  - [ Pick-and-Place Algorithm](#pick-and-place-algorithm)
 - [ Contributing](#-contributing)
-- [ License](#-license)
-- [ Acknowledgments](#-acknowledgments)
 </details>
 <hr>
 
@@ -128,7 +128,6 @@ You can install these packages using pip:
 > ```
 >
 > 3. Install the dependencies.
-> 
 
 ###  Running the Code
 
