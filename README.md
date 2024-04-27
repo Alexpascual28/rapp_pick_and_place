@@ -85,7 +85,7 @@
 | [version.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/evasdk/version.py)                 | <code> </code> |
 | [Eva.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/evasdk/Eva.py)                         | <code> </code> |
 | [helpers.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/evasdk/helpers.py)                 | <code> </code> |
-| [robot_state.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/evasdk/robot_state.py)         | <code> </code> |
+| [ robot_state.py](https://github.com/Alexpascual28/rapp_pick_and_place.git/blob/master/evasdk/robot_state.py)         | <code> </code> |
 
 </details>
 
