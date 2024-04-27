@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/ec559a9f6bfd399b82bb44393651661b08aaf7ba/icons/robot.svg" width="100" alt="project-logo">
+  <img src="https://www.svgrepo.com/show/296276/industrial-robot-robot.svg" width="100" alt="project-logo">
 </p>
 <p align="center">
     <h1 align="center">Robotic Arm Pick and Place</h1>
@@ -156,7 +156,7 @@ Inverse kinematics is the process of determining the joint parameters that provi
 
 In the Kinematics class, we calculate the Jacobian matrix as follows:
 
-> ```console
+> ```python
 > # Calculate the numerical value of J (jacobian) at each point,
 > # you can produce the Jacobian as follows
 > J = p.jacobian(theta)
@@ -168,7 +168,7 @@ Where `p` is the position vector of the end effector, and `theta` represents the
 
 To move the end effector towards a target, we adjust the joint angles based on the calculated differential movement `dp`. The Jacobian inverse is used to find the necessary change in joint angles `dtheta` to achieve `dp`:
 
-> ```console
+> ```python
 > J_inv = J_i.pinv()
 > dtheta = J_inv * dp_step
 > ```
@@ -177,15 +177,25 @@ To move the end effector towards a target, we adjust the joint angles based on t
 
 ### ArmBot
 
-The **ArmBot** class, defined in `armbot.py`, using the kinematics class to control the robotic arm and integrates computer vision for object detection. Key functions include:
+The **ArmBot** class, defined in `armbot.py`, using the kinematics class to control the robotic arm and integrates computer vision for object detection. To start the class you must first create an instance of it by providing the arm name as follows:
+
+> ```python
+> arm = Arm("evatrendylimashifterpt410")
+> ```
+
+The arm and camera names and ips can be changed in the "initialize_arm()" and the "initialize_camera()" functions within the armbot class.
+
+After an arm object has been instatiated, functions can be run using dot notation as usual. Key functions include:
 
 **Main Functions of ArmBot Class**
 
-* **initialize_kinematics()**: Sets up the kinematics for the robotic arm.
 * **move_end_efector(absolute_position)**: Moves the end effector to an absolute position.
 * **shift_end_efector(relative_position)**: Adjusts the end effector's position relative to its current location.
+* **set_joint_angles(joint_angles)**: Moves arm by directly commanding each joint to move to the specified angle (6DOF).
 * **open_gripper()** and **close_gripper()**: Controls the gripper to pick up or release objects.
-* **start_image_acquisition()**: Starts continuous image acquisition and processing.
+* **start_image_acquisition()**: Starts continuous image acquisition and processing, in parallel thread.
+* **get_current_image()**: Returns current image in continuous feed thread.
+* **take_picture()**: Takes and returns single picture without having to start a parallel continuous feed.
 * **detect_colour(image, colour_name)**: Identifies objects in the image based on their color.
 * **detect_shapes(mask, shape_name)**: Detects geometric shapes within a masked image.
 
@@ -198,8 +208,9 @@ The pick-and-place algorithm integrates kinematics, robotic arm control, and com
 * Calculating the object's position in the camera frame and adjusting the arm's position to align the gripper above the object.
 * Lowering the gripper, closing it to grasp the object, lifting, and moving the object to a new location for release.
 
-> ```console
+> ```python
 > # From pick-and-place.py, aligning and picking up an object
+> 
 > if is_gripper_over_object:
 >    arm.open_gripper()
 >    pick_up_position = [0, 0, -0.05] 
